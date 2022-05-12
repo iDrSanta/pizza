@@ -5,7 +5,7 @@ interface IPizza {
   imageUrl: string;
   title: string;
   types: number[];
-  size: number[];
+  sizes: number[];
   price: number;
   category: number;
   rating: number;
@@ -16,14 +16,18 @@ export const PizzaBlock: React.FC<IPizza> = ({
   imageUrl,
   title,
   types,
-  size,
+  sizes,
   price,
   category,
   rating,
 }) => {
-  const [pizzaCount, setPizzaCount] = React.useState(0);
+  const [pizzaCount, setPizzaCount] = React.useState<number>(0);
+  const [activeType, setActiveType] = React.useState<number>(0);
+  const [activeSize, setActiveSize] = React.useState<number>(0);
 
-  const onClickAdd = () => {
+  const typeNames: ['тонкое', 'традиционное'] = ['тонкое', 'традиционное'];
+
+  const onClickAdd = (): void => {
     setPizzaCount((pizzaCount) => pizzaCount + 1);
     console.log(pizzaCount);
   };
@@ -34,16 +38,22 @@ export const PizzaBlock: React.FC<IPizza> = ({
       <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          <li className="active">тонкое</li>
-          <li>традиционное</li>
+          {types.map((typeId) => (
+            <li
+              key={typeId}
+              onClick={() => setActiveType(typeId)}
+              className={activeType === typeId ? 'active' : ''}>
+              {typeNames[typeId]}
+            </li>
+          ))}
         </ul>
         <ul>
-          {/* {size.map((size) => (
-            <li key={size}>{`${size} см.`}</li>
-          ))} */}
-          <li className="active">26 см.</li>
-          <li>30 см.</li>
-          <li>40 см.</li>
+          {sizes?.map((size, i) => (
+            <li
+              key={size}
+              onClick={() => setActiveSize(i)}
+              className={activeSize === i ? 'active' : ''}>{`${size} см.`}</li>
+          ))}
         </ul>
       </div>
       <div className="pizza-block__bottom" onClick={onClickAdd}>

@@ -1,6 +1,16 @@
 import React from 'react';
 
 export const Sort = () => {
+  const [isVisible, setIsVisible] = React.useState<boolean>(false);
+  const [sotrBy, setSortBy] = React.useState<number>(0);
+
+  const sortCategory: ['популярности', 'цене', 'алфавиту'] = ['популярности', 'цене', 'алфавиту'];
+
+  const onClickSortBy = (id: number): void => {
+    setSortBy(id);
+    setIsVisible(false);
+  };
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -16,15 +26,23 @@ export const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => setIsVisible(true)}>{sortCategory[sotrBy]}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {isVisible && (
+        <div className="sort__popup">
+          <ul>
+            ,,
+            {sortCategory.map((cat, i) => (
+              <li
+                key={cat}
+                onClick={() => onClickSortBy(i)}
+                className={sotrBy === i ? 'active' : ''}>
+                {cat}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
