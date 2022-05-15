@@ -17,15 +17,30 @@ interface IPizza {
   rating: number;
 }
 
+interface ISortType {
+  name: string;
+  sortProperty: string;
+}
 export const Home = () => {
   const [pizzas, setPizzas] = React.useState<IPizza[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [categoryId, setCategoryId] = React.useState<number>(0);
+  const [sortType, setSortType] = React.useState<any>({
+    name: 'популярности',
+    sortProperty: 'rating',
+  });
 
   React.useEffect(() => {
+    setIsLoading(true);
+
+    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+    const sortBy = sortType.sortProperty.replace('-', '');
+    const category = categoryId ? `category=${categoryId}` : '';
+
     async function fetchPizzas() {
       try {
         const { data } = await axios.get<IPizza[]>(
-          `https://612272dad446280017054873.mockapi.io/pizza`,
+          `https://612272dad446280017054873.mockapi.io/pizza?${category}&sortBy=${sortBy}&order=${order}`,
         );
         setPizzas(data);
         setIsLoading(false);
@@ -39,14 +54,15 @@ export const Home = () => {
       }
     }
     fetchPizzas();
-  }, []);
+    window.scrollTo(0, 0);
+  }, [categoryId, sortType]);
 
   return (
     <div className="content">
       <div className="container">
         <div className="content__top">
-          <Categories />
-          <Sort />
+          <Categories value={categoryId} onChangeCategory={(id: number) => setCategoryId(id)} />
+          <Sort value={sortType} onChangeSort={(property: any) => setSortType(property)} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">

@@ -1,14 +1,28 @@
 import React from 'react';
+interface IList {
+  name: string;
+  sortProperty: string;
+}
+interface ISortProps {
+  value: any;
+  onChangeSort: (property: any) => void;
+}
 
-export const Sort: React.FC = () => {
-  const [isVisible, setIsVisible] = React.useState<boolean>(false);
-  const [sotrBy, setSortBy] = React.useState<number>(0);
-  const sortCategory: ['популярности', 'цене', 'алфавиту'] = ['популярности', 'цене', 'алфавиту'];
-  const sortName = sortCategory[sotrBy];
+export const Sort: React.FC<ISortProps> = ({ value, onChangeSort }) => {
+  const [open, setOpen] = React.useState<boolean>(false);
 
-  const onClickSortBy = (id: number): void => {
-    setSortBy(id);
-    setIsVisible(false);
+  const list: IList[] = [
+    { name: 'популярности(DESC)', sortProperty: 'rating' },
+    { name: 'популярности(ASC)', sortProperty: '-rating' },
+    { name: 'цене(DESC)', sortProperty: 'price' },
+    { name: 'цене(ASC)', sortProperty: '-price' },
+    { name: 'алфавиту(DESC)', sortProperty: 'title' },
+    { name: 'алфавиту(ASC)', sortProperty: '-title' },
+  ];
+
+  const onClickListItem = (property: any): void => {
+    onChangeSort(property);
+    setOpen(false);
   };
 
   return (
@@ -26,17 +40,17 @@ export const Sort: React.FC = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setIsVisible(!isVisible)}>{sortName}</span>
+        <span onClick={() => setOpen(!open)}>{value.name}</span>
       </div>
-      {isVisible && (
+      {open && (
         <div className="sort__popup">
           <ul>
-            {sortCategory.map((name, i) => (
+            {list.map((obj, i) => (
               <li
-                key={name}
-                onClick={() => onClickSortBy(i)}
-                className={sotrBy === i ? 'active' : ''}>
-                {name}
+                key={i}
+                onClick={() => onClickListItem(obj)}
+                className={value.sortProperty === obj.sortProperty ? 'active' : ''}>
+                {obj.name}
               </li>
             ))}
           </ul>

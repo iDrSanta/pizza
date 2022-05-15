@@ -1,35 +1,40 @@
 import React from 'react';
 
-interface ICategory {
-  title: string;
-  id: number;
+// interface ICategory {
+//   title: string;
+//   id: number;
+// }
+
+// const arrCategory: ICategory[] = [
+//   { title: 'Все', id: 0 },
+//   { title: 'Мясные', id: 1 },
+//   { title: 'Вегетарианская', id: 2 },
+//   { title: 'Гриль', id: 3 },
+//   { title: 'Острые', id: 4 },
+//   { title: 'Закрытые', id: 5 },
+// ];
+
+interface IProps {
+  value: number;
+  onChangeCategory: (id: number) => void;
 }
 
-const arrCategory: ICategory[] = [
-  { title: 'Все', id: 0 },
-  { title: 'Мясные', id: 1 },
-  { title: 'Вегетарианская', id: 2 },
-  { title: 'Гриль', id: 3 },
-  { title: 'Острые', id: 4 },
-  { title: 'Закрытые', id: 5 },
-];
+export const Categories: React.FC<IProps> = ({ value, onChangeCategory }) => {
+  const categoryName = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const Categories = () => {
-  const [activeIndex, setActiveIndex] = React.useState<number>(0);
-
-  const onClickCategory = (index: number) => {
-    setActiveIndex(index);
-  };
+  // const onClickCategory = (index: number) => {
+  //   setActiveIndex(index);
+  // };
 
   return (
     <div className="categories">
       <ul>
-        {arrCategory.map((obj) => (
+        {categoryName.map((category, index) => (
           <li
-            key={obj.id}
-            onClick={() => onClickCategory(obj.id)}
-            className={activeIndex === obj.id ? 'active' : ''}>
-            {obj.title}
+            key={index}
+            onClick={() => onChangeCategory(index)}
+            className={value === index ? 'active' : ''}>
+            {category}
           </li>
         ))}
       </ul>
