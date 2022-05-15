@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import React from 'react';
 import { Categories } from '../components/Categories';
-import { Header } from '../components/Header';
 import { PizzaBlock } from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import { Sort } from '../components/Sort';
