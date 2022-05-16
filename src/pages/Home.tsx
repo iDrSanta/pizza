@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import React from 'react';
 import { Categories } from '../components/Categories';
+import { Pagination } from '../components/Pagination';
 import { PizzaBlock } from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import { Sort } from '../components/Sort';
@@ -17,16 +18,16 @@ interface IPizza {
   rating: number;
 }
 
-interface ISortType {
-  name: string;
-  sortProperty: string;
+interface IHomePrrops {
+  searchValue: string;
 }
-export const Home = () => {
+export const Home: React.FC<IHomePrrops> = ({ searchValue }) => {
   const [pizzas, setPizzas] = React.useState<IPizza[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [categoryId, setCategoryId] = React.useState<number>(0);
+  const [currentPage, setCurrentPage] = React.useState<number>(1);
   const [sortType, setSortType] = React.useState<any>({
-    name: 'популярности',
+    name: 'популярности DESC',
     sortProperty: 'rating',
   });
 
@@ -36,11 +37,12 @@ export const Home = () => {
     const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
     const sortBy = sortType.sortProperty.replace('-', '');
     const category = categoryId ? `category=${categoryId}` : '';
+    const search = searchValue ? `&search=${searchValue}` : '';
 
     async function fetchPizzas() {
       try {
         const { data } = await axios.get<IPizza[]>(
-          `https://612272dad446280017054873.mockapi.io/pizza?${category}&sortBy=${sortBy}&order=${order}`,
+          `https://612272dad446280017054873.mockapi.io/pizza?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
         );
         setPizzas(data);
         setIsLoading(false);
@@ -55,7 +57,7 @@ export const Home = () => {
     }
     fetchPizzas();
     window.scrollTo(0, 0);
-  }, [categoryId, sortType]);
+  }, [categoryId, sortType, searchValue, currentPage]);
 
   return (
     <div className="content">
@@ -82,6 +84,7 @@ export const Home = () => {
                 />
               ))}
         </div>
+        <Pagination currentPage={currentPage} onChangePage={(number) => setCurrentPage(number)} />
       </div>
     </div>
   );

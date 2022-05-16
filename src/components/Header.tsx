@@ -1,8 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/img/pizza-logo.svg';
+import { Search } from './Search';
 
-export const Header = () => {
+interface IHeaderProps {
+  searchValue: any;
+  setSearchValue: any;
+  onClickClear: any;
+}
+
+export const Header: React.FC<IHeaderProps> = ({ searchValue, setSearchValue, onClickClear }) => {
   return (
     <div className="header">
       <div className="container">
@@ -15,6 +22,11 @@ export const Header = () => {
             </div>
           </div>
         </Link>
+        <Search
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          onClickClear={onClickClear}
+        />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>520 ₽</span>
