@@ -1,17 +1,9 @@
 import React from 'react';
-interface IList {
-  name: string;
-  sortProperty: string;
-}
-interface ISortProps {
-  value: any;
-  onChangeSort: (property: any) => void;
-}
 
-export const Sort: React.FC<ISortProps> = ({ value, onChangeSort }) => {
-  const [open, setOpen] = React.useState<boolean>(false);
+export const Sort = ({ value, onChangeSort }) => {
+  const [open, setOpen] = React.useState(false);
 
-  const list: IList[] = [
+  const list = [
     { name: 'популярности(DESC)', sortProperty: 'rating' },
     { name: 'популярности(ASC)', sortProperty: '-rating' },
     { name: 'цене(DESC)', sortProperty: 'price' },
@@ -20,7 +12,7 @@ export const Sort: React.FC<ISortProps> = ({ value, onChangeSort }) => {
     { name: 'алфавиту(ASC)', sortProperty: '-title' },
   ];
 
-  const onClickListItem = (property: any): void => {
+  const onClickListItem = (property) => {
     onChangeSort(property);
     setOpen(false);
   };

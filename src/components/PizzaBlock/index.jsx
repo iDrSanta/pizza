@@ -1,34 +1,14 @@
 import React from 'react';
 
-interface IPizza {
-  id: number;
-  imageUrl: string;
-  title: string;
-  types: number[];
-  sizes: number[];
-  price: number;
-  category: number;
-  rating: number;
-}
+export const PizzaBlock = ({ id, imageUrl, title, types, sizes, price, category, rating }) => {
+  const [pizzaCount, setPizzaCount] = React.useState(0);
+  const [activeType, setActiveType] = React.useState(0);
+  const [activeSize, setActiveSize] = React.useState(0);
 
-export const PizzaBlock: React.FC<IPizza> = ({
-  id,
-  imageUrl,
-  title,
-  types,
-  sizes,
-  price,
-  category,
-  rating,
-}) => {
-  const [pizzaCount, setPizzaCount] = React.useState<number>(0);
-  const [activeType, setActiveType] = React.useState<number>(0);
-  const [activeSize, setActiveSize] = React.useState<number>(0);
+  const typeNames = ['тонкое', 'традиционное'];
 
-  const typeNames: ['тонкое', 'традиционное'] = ['тонкое', 'традиционное'];
-
-  const onClickAdd = (): void => {
-    setPizzaCount((pizzaCount) => pizzaCount + 1);
+  const onClickAdd = () => {
+    setPizzaCount((prev) => prev + 1);
     console.log(pizzaCount);
   };
 

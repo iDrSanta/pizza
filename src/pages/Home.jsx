@@ -7,26 +7,12 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 import { Sort } from '../components/Sort';
 import '../scss/app.scss';
 
-interface IPizza {
-  id: number;
-  imageUrl: string;
-  title: string;
-  types: number[];
-  sizes: number[];
-  price: number;
-  category: number;
-  rating: number;
-}
-
-interface IHomePrrops {
-  searchValue: string;
-}
-export const Home: React.FC<IHomePrrops> = ({ searchValue }) => {
-  const [pizzas, setPizzas] = React.useState<IPizza[]>([]);
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [categoryId, setCategoryId] = React.useState<number>(0);
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
-  const [sortType, setSortType] = React.useState<any>({
+export const Home = ({ searchValue }) => {
+  const [pizzas, setPizzas] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [sortType, setSortType] = React.useState({
     name: 'популярности DESC',
     sortProperty: 'rating',
   });
@@ -41,13 +27,13 @@ export const Home: React.FC<IHomePrrops> = ({ searchValue }) => {
 
     async function fetchPizzas() {
       try {
-        const { data } = await axios.get<IPizza[]>(
+        const { data } = await axios.get(
           `https://612272dad446280017054873.mockapi.io/pizza?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
         );
         setPizzas(data);
         setIsLoading(false);
       } catch (error) {
-        const respError = error as Error | AxiosError;
+        const respError = error;
         if (axios.isAxiosError(respError)) {
           console.warn(`Произошла серверная ошибка ${respError}`);
         } else {
@@ -63,8 +49,8 @@ export const Home: React.FC<IHomePrrops> = ({ searchValue }) => {
     <div className="content">
       <div className="container">
         <div className="content__top">
-          <Categories value={categoryId} onChangeCategory={(id: number) => setCategoryId(id)} />
-          <Sort value={sortType} onChangeSort={(property: any) => setSortType(property)} />
+          <Categories value={categoryId} onChangeCategory={(id) => setCategoryId(id)} />
+          <Sort value={sortType} onChangeSort={(property) => setSortType(property)} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
