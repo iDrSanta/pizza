@@ -1,5 +1,8 @@
-import axios, { AxiosError } from 'axios';
 import React from 'react';
+import axios, { AxiosError } from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setCategoryId } from '../redux/slices/filterSlice';
 import { Categories } from '../components/Categories';
 import { Pagination } from '../components/Pagination';
 import { PizzaBlock } from '../components/PizzaBlock';
@@ -8,20 +11,23 @@ import { Sort } from '../components/Sort';
 import '../scss/app.scss';
 
 export const Home = ({ searchValue }) => {
+  const { categoryId, sort } = useSelector(({ filter }) => filter);
+  const sortType = sort.sortProperty;
+  const dispatch = useDispatch();
+
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [sortType, setSortType] = React.useState({
-    name: 'популярности DESC',
-    sortProperty: 'rating',
-  });
+
+  const onChangeCategory = (id) => {
+    dispatch(setCategoryId(id));
+  };
 
   React.useEffect(() => {
     setIsLoading(true);
 
-    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
-    const sortBy = sortType.sortProperty.replace('-', '');
+    const order = sortType.includes('-') ? 'asc' : 'desc';
+    const sortBy = sortType.replace('-', '');
     const category = categoryId ? `category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
 
@@ -49,8 +55,8 @@ export const Home = ({ searchValue }) => {
     <div className="content">
       <div className="container">
         <div className="content__top">
-          <Categories value={categoryId} onChangeCategory={(id) => setCategoryId(id)} />
-          <Sort value={sortType} onChangeSort={(property) => setSortType(property)} />
+          <Categories value={categoryId} onChangeCategory={(id) => onChangeCategory(id)} />
+          <Sort />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
